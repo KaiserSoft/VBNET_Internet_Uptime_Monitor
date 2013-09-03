@@ -123,6 +123,15 @@ Public Class frmMain
             log_message(True)
         Else
             log_message(False)
+            'log content to last error box
+            If Me.txtLastError.InvokeRequired Then
+                ' It's on a different thread, so use Invoke. 
+                Dim d As New SetTextCallback(AddressOf SetLastError)
+                Me.Invoke(d, New Object() {Now.ToString("u") & " - not all words (" & My.Settings.words & ") found!" & vbCrLf & "Website returned:" & vbCrLf & content(1)})
+            Else
+                ' It's on the same thread, no need for Invoke. 
+                Me.txtLastError.Text = Now.ToString("u") & " - not all words (" & My.Settings.words & ") found!" & vbCrLf & "Website returned:" & vbCrLf & content(1)
+            End If
         End If
 
     End Sub
@@ -267,7 +276,7 @@ Public Class frmMain
         If Not My.Settings.IsUpgraded Then
             My.Settings.Upgrade()
             My.Settings.IsUpgraded = True
-            MsgBox("Your settings have been imported from the previous build version.", MsgBoxStyle.Information, "Upgrade Complete")
+            MsgBox("Your settings have been imported from the previous version.", MsgBoxStyle.Information, "Upgrade Complete")
         End If
 
         'load settings
@@ -279,7 +288,7 @@ Public Class frmMain
         chkReportOK.Checked = My.Settings.report_ok
 
         Dim tooltip_words As ToolTip = New ToolTip()
-        tooltip_words.SetToolTip(txtWordUp, "comma separated list of words")
+        tooltip_words.SetToolTip(txtWordUp, "comma separated list of words to look for on the website specified above")
 
         'define default grid view
         setup_new_grid()
@@ -298,9 +307,7 @@ Public Class frmMain
         gridLog.ColumnCount = 3
         gridLog.Columns(0).Name = "Status"
         gridLog.Columns(1).Name = "Datum"
-        'gridLog.Columns(1).Width = 125
         gridLog.Columns(2).Name = "Host"
-        'gridLog.Columns(2).Width = 254
     End Sub
 
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs)
