@@ -88,6 +88,7 @@ Public Class frmMain
 
         'check content for errors
         If content(0) = "!200" Then
+            log_message(False)
             'log content to last error box
             If Me.txtLastError.InvokeRequired Then
                 ' It's on a different thread, so use Invoke. 
@@ -97,7 +98,6 @@ Public Class frmMain
                 ' It's on the same thread, no need for Invoke. 
                 Me.txtLastError.Text = Now.ToString("u") & vbCrLf & content(1)
             End If
-            log_message(False)
             Exit Sub
         End If
 
