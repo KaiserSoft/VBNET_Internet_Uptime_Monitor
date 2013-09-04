@@ -137,6 +137,18 @@ Namespace My
                 Me("report_error") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("20000")>  _
+        Public Property grid_prune() As Integer
+            Get
+                Return CType(Me("grid_prune"),Integer)
+            End Get
+            Set
+                Me("grid_prune") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

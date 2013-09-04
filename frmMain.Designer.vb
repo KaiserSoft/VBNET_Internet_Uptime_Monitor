@@ -31,7 +31,6 @@ Partial Class frmMain
         Me.Label3 = New System.Windows.Forms.Label()
         Me.gridLog = New System.Windows.Forms.DataGridView()
         Me.chkReportError = New System.Windows.Forms.CheckBox()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.lblThreadStatus = New System.Windows.Forms.Label()
         Me.grpInput = New System.Windows.Forms.GroupBox()
         Me.btnAbout = New System.Windows.Forms.Button()
@@ -41,6 +40,11 @@ Partial Class frmMain
         Me.Label6 = New System.Windows.Forms.Label()
         Me.chkReportOK = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.btnExportLog = New System.Windows.Forms.Button()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.txtGridPrune = New System.Windows.Forms.TextBox()
+        Me.lblChkCounter = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.btnClear = New System.Windows.Forms.Button()
         Me.lblThrStarted = New System.Windows.Forms.Label()
         Me.lblErrorCnt = New System.Windows.Forms.Label()
@@ -106,40 +110,31 @@ Partial Class frmMain
         Me.gridLog.AllowUserToAddRows = False
         Me.gridLog.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.gridLog.Location = New System.Drawing.Point(8, 48)
+        Me.gridLog.Location = New System.Drawing.Point(8, 74)
         Me.gridLog.Name = "gridLog"
         Me.gridLog.ReadOnly = True
-        Me.gridLog.Size = New System.Drawing.Size(522, 312)
+        Me.gridLog.Size = New System.Drawing.Size(522, 286)
         Me.gridLog.TabIndex = 5
         Me.gridLog.TabStop = False
         '
         'chkReportError
         '
         Me.chkReportError.AutoSize = True
-        Me.chkReportError.Location = New System.Drawing.Point(89, 13)
+        Me.chkReportError.Location = New System.Drawing.Point(89, 12)
         Me.chkReportError.Name = "chkReportError"
         Me.chkReportError.Size = New System.Drawing.Size(88, 17)
         Me.chkReportError.TabIndex = 5
         Me.chkReportError.Text = "Report Errors"
         Me.chkReportError.UseVisualStyleBackColor = True
         '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(302, 14)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(74, 13)
-        Me.Label5.TabIndex = 9
-        Me.Label5.Text = "Thread Status"
-        '
         'lblThreadStatus
         '
         Me.lblThreadStatus.AutoSize = True
-        Me.lblThreadStatus.Location = New System.Drawing.Point(374, 32)
+        Me.lblThreadStatus.Location = New System.Drawing.Point(356, 32)
         Me.lblThreadStatus.Name = "lblThreadStatus"
-        Me.lblThreadStatus.Size = New System.Drawing.Size(35, 13)
+        Me.lblThreadStatus.Size = New System.Drawing.Size(174, 13)
         Me.lblThreadStatus.TabIndex = 10
-        Me.lblThreadStatus.Text = "offline"
+        Me.lblThreadStatus.Text = "last check -  2013-01-01 12:33:55Z"
         '
         'grpInput
         '
@@ -209,7 +204,7 @@ Partial Class frmMain
         'chkReportOK
         '
         Me.chkReportOK.AutoSize = True
-        Me.chkReportOK.Location = New System.Drawing.Point(183, 13)
+        Me.chkReportOK.Location = New System.Drawing.Point(89, 30)
         Me.chkReportOK.Name = "chkReportOK"
         Me.chkReportOK.Size = New System.Drawing.Size(76, 17)
         Me.chkReportOK.TabIndex = 6
@@ -218,24 +213,72 @@ Partial Class frmMain
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.btnExportLog)
+        Me.GroupBox1.Controls.Add(Me.Label5)
+        Me.GroupBox1.Controls.Add(Me.txtGridPrune)
+        Me.GroupBox1.Controls.Add(Me.lblChkCounter)
+        Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.btnClear)
         Me.GroupBox1.Controls.Add(Me.lblThrStarted)
         Me.GroupBox1.Controls.Add(Me.lblErrorCnt)
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.chkReportOK)
         Me.GroupBox1.Controls.Add(Me.lblThreadStatus)
-        Me.GroupBox1.Controls.Add(Me.Label5)
         Me.GroupBox1.Controls.Add(Me.gridLog)
         Me.GroupBox1.Controls.Add(Me.chkReportError)
         Me.GroupBox1.Location = New System.Drawing.Point(13, 105)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(536, 366)
+        Me.GroupBox1.Size = New System.Drawing.Size(537, 366)
         Me.GroupBox1.TabIndex = 12
         Me.GroupBox1.TabStop = False
         '
+        'btnExportLog
+        '
+        Me.btnExportLog.Location = New System.Drawing.Point(6, 12)
+        Me.btnExportLog.Name = "btnExportLog"
+        Me.btnExportLog.Size = New System.Drawing.Size(75, 23)
+        Me.btnExportLog.TabIndex = 20
+        Me.btnExportLog.Text = "export log"
+        Me.btnExportLog.UseVisualStyleBackColor = True
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(138, 51)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(78, 13)
+        Me.Label5.TabIndex = 19
+        Me.Label5.Text = "Entries to keep"
+        '
+        'txtGridPrune
+        '
+        Me.txtGridPrune.Location = New System.Drawing.Point(89, 48)
+        Me.txtGridPrune.Name = "txtGridPrune"
+        Me.txtGridPrune.Size = New System.Drawing.Size(43, 20)
+        Me.txtGridPrune.TabIndex = 18
+        Me.txtGridPrune.Text = "20000"
+        '
+        'lblChkCounter
+        '
+        Me.lblChkCounter.AutoSize = True
+        Me.lblChkCounter.Location = New System.Drawing.Point(278, 31)
+        Me.lblChkCounter.Name = "lblChkCounter"
+        Me.lblChkCounter.Size = New System.Drawing.Size(13, 13)
+        Me.lblChkCounter.TabIndex = 17
+        Me.lblChkCounter.Text = "0"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(238, 32)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(43, 13)
+        Me.Label4.TabIndex = 16
+        Me.Label4.Text = "Checks"
+        '
         'btnClear
         '
-        Me.btnClear.Location = New System.Drawing.Point(8, 13)
+        Me.btnClear.Location = New System.Drawing.Point(6, 45)
         Me.btnClear.Name = "btnClear"
         Me.btnClear.Size = New System.Drawing.Size(75, 23)
         Me.btnClear.TabIndex = 15
@@ -246,16 +289,16 @@ Partial Class frmMain
         'lblThrStarted
         '
         Me.lblThrStarted.AutoSize = True
-        Me.lblThrStarted.Location = New System.Drawing.Point(374, 14)
+        Me.lblThrStarted.Location = New System.Drawing.Point(331, 14)
         Me.lblThrStarted.Name = "lblThrStarted"
-        Me.lblThrStarted.Size = New System.Drawing.Size(45, 13)
+        Me.lblThrStarted.Size = New System.Drawing.Size(198, 13)
         Me.lblThrStarted.TabIndex = 14
-        Me.lblThrStarted.Text = "stopped"
+        Me.lblThrStarted.Text = "Monitor stopped - 2013-01-01 12:33:55Z"
         '
         'lblErrorCnt
         '
         Me.lblErrorCnt.AutoSize = True
-        Me.lblErrorCnt.Location = New System.Drawing.Point(144, 32)
+        Me.lblErrorCnt.Location = New System.Drawing.Point(278, 14)
         Me.lblErrorCnt.Name = "lblErrorCnt"
         Me.lblErrorCnt.Size = New System.Drawing.Size(13, 13)
         Me.lblErrorCnt.TabIndex = 13
@@ -264,19 +307,19 @@ Partial Class frmMain
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(86, 32)
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(238, 14)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(63, 13)
+        Me.Label7.Size = New System.Drawing.Size(34, 13)
         Me.Label7.TabIndex = 12
-        Me.Label7.Text = "ERRORS:"
+        Me.Label7.Text = "Errors"
         '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.txtLastError)
         Me.GroupBox2.Location = New System.Drawing.Point(13, 477)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(535, 82)
+        Me.GroupBox2.Size = New System.Drawing.Size(537, 82)
         Me.GroupBox2.TabIndex = 13
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Last Error"
@@ -324,7 +367,6 @@ Partial Class frmMain
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents gridLog As System.Windows.Forms.DataGridView
     Friend WithEvents lblThreadStatus As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents chkReportError As System.Windows.Forms.CheckBox
     Friend WithEvents grpInput As System.Windows.Forms.GroupBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
@@ -340,5 +382,10 @@ Partial Class frmMain
     Friend WithEvents btnToggle As System.Windows.Forms.Button
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents txtLastError As System.Windows.Forms.TextBox
+    Friend WithEvents lblChkCounter As System.Windows.Forms.Label
+    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents btnExportLog As System.Windows.Forms.Button
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents txtGridPrune As System.Windows.Forms.TextBox
 
 End Class

@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.IO
 
 Public Class frmMain
     Shared _timer As Timer
@@ -39,6 +40,7 @@ Public Class frmMain
         My.Settings.report_ok = chkReportOK.Checked
         My.Settings.report_error = chkReportError.Checked
         My.Settings.timeout = txtWebTimeout.Text
+        My.Settings.grid_prune = txtGridPrune.Text
 
 
 
@@ -58,15 +60,16 @@ Public Class frmMain
             _timer.Start()
 
             btnToggle.Text = "Stop"
-            lblThreadStatus.Text = "running - " & Now.ToString("u")
-            lblThrStarted.Text = "started  - " & Now.ToString("u")
+            lblThreadStatus.Text = "last check - " & Now.ToString("u")
+            lblThrStarted.Text = "Monitor started  - " & Now.ToString("u")
+            lblChkCounter.Text = 1 'will be incremented by timer
         Else
             _timer.Stop()
             uptime_monitor.CancelAsync()
             btnToggle.Text = "Start"
             uptime_monitor = Nothing
             lblThreadStatus.Text = ""
-            lblThrStarted.Text = "stopped - " & Now.ToString("u")
+            lblThrStarted.Text = "Monitor stopped - " & Now.ToString("u")
             grpInput.Enabled = True
         End If
     End Sub
@@ -76,9 +79,21 @@ Public Class frmMain
     Private Sub uptime_worker_restart()
         If Not uptime_monitor Is Nothing Then
             If uptime_monitor.IsBusy = False And uptime_monitor.CancellationPending = False Then
+                If Me.txtLastError.InvokeRequired Then
+                    ' It's on a different thread, so use Invoke. 
+                    Dim d As New SetIntCallback(AddressOf SetChkCounter)
+                    Me.Invoke(d, New Object() {})
+                Else
+                    lblChkCounter.Text = lblChkCounter.Text + 1
+                End If
+
                 uptime_monitor.RunWorkerAsync()
             End If
         End If
+    End Sub
+
+    Private Sub SetChkCounter()
+        lblChkCounter.Text = lblChkCounter.Text + 1
     End Sub
 
     Private Sub get_website(ByVal sender As Object, ByVal e As DoWorkEventArgs)
@@ -148,10 +163,10 @@ Public Class frmMain
         If Me.lblThreadStatus.InvokeRequired Then
             ' It's on a different thread, so use Invoke. 
             Dim d As New SetTextCallback(AddressOf SetTreadLabel)
-            Me.Invoke(d, New Object() {"running - "})
+            Me.Invoke(d, New Object() {"last check - "})
         Else
             ' It's on the same thread, no need for Invoke. 
-            Me.lblThreadStatus.Text = "running - " & Now.ToString("u")
+            Me.lblThreadStatus.Text = "last check - " & Now.ToString("u")
         End If
 
 
@@ -206,11 +221,28 @@ Public Class frmMain
     Private Sub SetText(ByVal [text] As String)
 
         Dim row As String() = [text].Split(",")
+        Dim grid_prune As Integer = txtGridPrune.Text
+        If grid_prune < 1 Then
+            grid_prune = 1 'must be > 1 or crash
+        End If
 
-        'Me.gridLog.Rows.Add(row)
+        'check count and remove last row when needed
+        If Me.gridLog.RowCount >= grid_prune Then
+            'remove more than one?
+            If Me.gridLog.RowCount > grid_prune Then
+                'delete from grid_prune to last rowcount
+                For x = grid_prune To Me.gridLog.RowCount Step 1
+                    Me.gridLog.Rows.RemoveAt(Me.gridLog.RowCount - 1)
+                Next
+            Else
+                'just one
+                Me.gridLog.Rows.RemoveAt(grid_prune - 1)
+            End If
+        End If
+
         Me.gridLog.Rows.Insert(0, row)
+        'Me.gridLog.Rows.Add(row)
     End Sub
-
 
     Public Function DownloadWebpage(ByVal URL As String) As Object
         'http://msdn.microsoft.com/de-de/library/bb979281.aspx
@@ -276,8 +308,12 @@ Public Class frmMain
         If Not My.Settings.IsUpgraded Then
             My.Settings.Upgrade()
             My.Settings.IsUpgraded = True
-            MsgBox("Your settings have been imported from the previous version.", MsgBoxStyle.Information, "Upgrade Complete")
+            'MsgBox("Your settings have been imported from the previous version.", MsgBoxStyle.Information, "Upgrade Complete")
         End If
+
+        lblThreadStatus.Text = ""
+        lblThrStarted.Text = "Monitor stopped - " & Now.ToString("u")
+
 
         'load settings
         txtSrv.Text = My.Settings.url
@@ -286,6 +322,7 @@ Public Class frmMain
         txtWordUp.Text = My.Settings.words
         chkReportError.Checked = My.Settings.report_error
         chkReportOK.Checked = My.Settings.report_ok
+        txtGridPrune.Text = My.Settings.grid_prune
 
         Dim tooltip_words As ToolTip = New ToolTip()
         tooltip_words.SetToolTip(txtWordUp, "comma separated list of words to look for on the website specified above")
@@ -306,8 +343,8 @@ Public Class frmMain
         gridLog.Rows.Clear()
         gridLog.ColumnCount = 3
         gridLog.Columns(0).Name = "Status"
-        gridLog.Columns(1).Name = "Datum"
-        gridLog.Columns(2).Name = "Host"
+        gridLog.Columns(1).Name = "Date"
+        gridLog.Columns(2).Name = "Website"
     End Sub
 
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs)
@@ -362,5 +399,42 @@ Public Class frmMain
                 End If
             End If
         Next
+    End Sub
+
+    Private Sub btnExportLog_Click(sender As System.Object, e As System.EventArgs) Handles btnExportLog.Click
+        Dim output As String = ""
+        Dim line As String
+        Dim file As System.IO.StreamWriter
+        Dim sF As New SaveFileDialog
+        Dim separtor As String = ","
+
+        sF.Filter = "csv files , separated (*.csv)|*.csv|csv files ; separated (*.csv)|*.csv|All files (*.*)|*.*"
+        sF.FilterIndex = 1
+        sF.RestoreDirectory = True
+        sF.FileName = "InternetMonitor_LogExport-" & Now.ToString("u").Replace(":", "-") & ".csv"
+
+        If sF.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            file = My.Computer.FileSystem.OpenTextFileWriter(sF.FileName, True)
+
+            'Europe uses ; as csv separator in Excel
+            If sF.FilterIndex = 2 Then
+                separtor = ";"
+            End If
+
+            If file IsNot Nothing Then
+
+                'loop over every row then cell
+                For Each row As DataGridViewRow In gridLog.Rows()
+                    line = "" 'start a fresh line
+                    For Each cell As DataGridViewCell In row.Cells()
+                        line = line & separtor & cell.Value
+                    Next
+                    file.WriteLine(line.TrimStart(separtor))
+                Next
+            End If
+
+            file.Close()
+            MsgBox("Export complete")
+        End If
     End Sub
 End Class
