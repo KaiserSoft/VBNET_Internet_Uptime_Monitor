@@ -104,7 +104,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("4000")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("5000")>  _
         Public Property timeout() As Integer
             Get
                 Return CType(Me("timeout"),Integer)
@@ -140,13 +140,25 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("20000")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("60000")>  _
         Public Property grid_prune() As Integer
             Get
                 Return CType(Me("grid_prune"),Integer)
             End Get
             Set
                 Me("grid_prune") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+        Public Property default_export() As Integer
+            Get
+                Return CType(Me("default_export"),Integer)
+            End Get
+            Set
+                Me("default_export") = value
             End Set
         End Property
     End Class

@@ -15,7 +15,7 @@
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">4000</Value>
+      <Value Profile="(Default)">5000</Value>
     </Setting>
     <Setting Name="report_ok" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -24,7 +24,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="grid_prune" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20000</Value>
+      <Value Profile="(Default)">60000</Value>
+    </Setting>
+    <Setting Name="default_export" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

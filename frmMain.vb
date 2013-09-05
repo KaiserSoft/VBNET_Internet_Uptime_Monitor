@@ -4,6 +4,9 @@ Imports System.IO
 Public Class frmMain
     Shared _timer As Timer
     Shared uptime_monitor As BackgroundWorker
+    Public Shared OverrideSTRG As Boolean = False 'allows user to skip minimum time and timeout checks
+    Public Shared OverrideSHIFT As Boolean = False 'allows user to skip minimum time and timeout checks
+    Public Shared OverrideActive As Boolean = False ' true when current run is not using checks - needed for "stop" operation
 
     ' This delegate enables asynchronous calls for setting 
     ' the text property on a TextBox control. 
@@ -22,15 +25,27 @@ Public Class frmMain
         toggle_inputs()
 
         'frequency may not be below 5 seconds
-        If txtFreq.Text < 5 Or My.Settings.frequency < 5 Then
-            My.Settings.frequency = 5
-            txtFreq.Text = 5
-        End If
+        If OverrideActive = False And (OverrideSHIFT = False Or OverrideSTRG = False) Then
+            If txtFreq.Text < 5 Or My.Settings.frequency < 5 Then
+                My.Settings.frequency = 5
+                txtFreq.Text = 5
+            End If
 
-        'timeout may not be below 1second
-        If txtWebTimeout.Text < 1000 Or My.Settings.timeout < 1000 Then
-            My.Settings.timeout = 1000
-            txtWebTimeout.Text = 1000
+            'timeout may not be below 1second
+            If txtWebTimeout.Text < 1000 Or My.Settings.timeout < 1000 Then
+                My.Settings.timeout = 1000
+                txtWebTimeout.Text = 1000
+            End If
+        Else
+            'advanced users
+            If txtFreq.Text < 1 Then
+                txtFreq.Text = 1
+            End If
+            If txtWebTimeout.Text < 1 Then
+                txtWebTimeout.Text = 1
+            End If
+
+            OverrideActive = True 'set to true to avoid "fixing" the settings on stop
         End If
 
 
@@ -62,7 +77,7 @@ Public Class frmMain
             btnToggle.Text = "Stop"
             lblThreadStatus.Text = "last check - " & Now.ToString("u")
             lblThrStarted.Text = "Monitor started  - " & Now.ToString("u")
-            lblChkCounter.Text = 1 'will be incremented by timer
+            lblChkCounter.Text = lblChkCounter.Text + 1 'will be incremented by timer
         Else
             _timer.Stop()
             uptime_monitor.CancelAsync()
@@ -71,6 +86,7 @@ Public Class frmMain
             lblThreadStatus.Text = ""
             lblThrStarted.Text = "Monitor stopped - " & Now.ToString("u")
             grpInput.Enabled = True
+            OverrideActive = False
         End If
     End Sub
 
@@ -103,7 +119,7 @@ Public Class frmMain
 
         'check content for errors
         If content(0) = "!200" Then
-            log_message(False)
+            log_message(False, content(1))
             'log content to last error box
             If Me.txtLastError.InvokeRequired Then
                 ' It's on a different thread, so use Invoke. 
@@ -135,9 +151,9 @@ Public Class frmMain
 
         'compare check with found counter. if they are the same then everything "should" be ok
         If check.Count = found_cnt Then
-            log_message(True)
+            log_message(True, content(1))
         Else
-            log_message(False)
+            log_message(False, content(1))
             'log content to last error box
             If Me.txtLastError.InvokeRequired Then
                 ' It's on a different thread, so use Invoke. 
@@ -155,7 +171,7 @@ Public Class frmMain
         Me.txtLastError.Text = [string]
     End Sub
 
-    Public Sub log_message(ByRef success As Boolean)
+    Public Sub log_message(ByRef success As Boolean, ByRef webreturn As String)
         Dim row As String
         Dim cur_index As Integer = Me.gridLog.Rows.Count
 
@@ -172,10 +188,10 @@ Public Class frmMain
 
         If success = True And My.Settings.report_ok = True Then
             ' log positive message
-            row = "OK," & Now.ToString("u") & "," & My.Settings.url
+            row = "OK," & Now.ToString("u") & "," & webreturn & "," & My.Settings.url
         ElseIf success = False And My.Settings.report_error = True Then
             ' log negative message
-            row = "ERROR," & Now.ToString("u") & "," & My.Settings.url
+            row = "ERROR," & Now.ToString("u") & "," & webreturn & "," & My.Settings.url
             increment_error_counter()
         Else
             Exit Sub
@@ -286,6 +302,16 @@ Public Class frmMain
         End Try
     End Function
 
+    Private Sub frmMain_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyDown
+        ' STRG + SHIFT while clicking on Start may be used to override default checks
+
+        If e.KeyCode = 16 Then
+            OverrideSHIFT = True
+        ElseIf e.KeyCode = 17 Then
+            OverrideSTRG = True
+        End If
+    End Sub
+
     Private Sub frmMain_KeyUp(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyUp
         'start / when pressing enter and terminate on ESC
         If e.KeyCode = 27 Or e.KeyCode = 13 Then
@@ -300,6 +326,13 @@ Public Class frmMain
             End If
 
             toggle_monitor()
+        End If
+
+        'undo override buttons
+        If e.KeyCode = 16 Then
+            OverrideSHIFT = False
+        ElseIf e.KeyCode = 17 Then
+            OverrideSTRG = False
         End If
     End Sub
 
@@ -334,6 +367,7 @@ Public Class frmMain
     Private Sub reset_input()
         setup_new_grid()
         lblErrorCnt.Text = 0
+        lblChkCounter.Text = 0
         lblErrorCnt.ForeColor = Color.Black
         txtLastError.Text = "no errors yet ...."
     End Sub
@@ -341,10 +375,11 @@ Public Class frmMain
     Private Sub setup_new_grid()
         'setup data grid
         gridLog.Rows.Clear()
-        gridLog.ColumnCount = 3
+        gridLog.ColumnCount = 4
         gridLog.Columns(0).Name = "Status"
         gridLog.Columns(1).Name = "Date"
-        gridLog.Columns(2).Name = "Website"
+        gridLog.Columns(2).Name = "Returned"
+        gridLog.Columns(3).Name = "URL"
     End Sub
 
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs)
@@ -409,7 +444,7 @@ Public Class frmMain
         Dim separtor As String = ","
 
         sF.Filter = "csv files , separated (*.csv)|*.csv|csv files ; separated (*.csv)|*.csv|All files (*.*)|*.*"
-        sF.FilterIndex = 1
+        sF.FilterIndex = My.Settings.default_export
         sF.RestoreDirectory = True
         sF.FileName = "InternetMonitor_LogExport-" & Now.ToString("u").Replace(":", "-") & ".csv"
 
@@ -421,8 +456,11 @@ Public Class frmMain
                 separtor = ";"
             End If
 
-            If file IsNot Nothing Then
+            'store selected filter index for next time
+            My.Settings.default_export = sF.FilterIndex
 
+
+            If file IsNot Nothing Then
                 'loop over every row then cell
                 For Each row As DataGridViewRow In gridLog.Rows()
                     line = "" 'start a fresh line

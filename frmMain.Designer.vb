@@ -120,7 +120,7 @@ Partial Class frmMain
         'chkReportError
         '
         Me.chkReportError.AutoSize = True
-        Me.chkReportError.Location = New System.Drawing.Point(89, 12)
+        Me.chkReportError.Location = New System.Drawing.Point(104, 12)
         Me.chkReportError.Name = "chkReportError"
         Me.chkReportError.Size = New System.Drawing.Size(88, 17)
         Me.chkReportError.TabIndex = 5
@@ -157,7 +157,7 @@ Partial Class frmMain
         '
         'btnAbout
         '
-        Me.btnAbout.Location = New System.Drawing.Point(464, 63)
+        Me.btnAbout.Location = New System.Drawing.Point(465, 62)
         Me.btnAbout.Name = "btnAbout"
         Me.btnAbout.Size = New System.Drawing.Size(66, 23)
         Me.btnAbout.TabIndex = 13
@@ -204,7 +204,7 @@ Partial Class frmMain
         'chkReportOK
         '
         Me.chkReportOK.AutoSize = True
-        Me.chkReportOK.Location = New System.Drawing.Point(89, 30)
+        Me.chkReportOK.Location = New System.Drawing.Point(104, 30)
         Me.chkReportOK.Name = "chkReportOK"
         Me.chkReportOK.Size = New System.Drawing.Size(76, 17)
         Me.chkReportOK.TabIndex = 6
@@ -244,24 +244,24 @@ Partial Class frmMain
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(138, 51)
+        Me.Label5.Location = New System.Drawing.Point(153, 51)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(78, 13)
+        Me.Label5.Size = New System.Drawing.Size(59, 13)
         Me.Label5.TabIndex = 19
-        Me.Label5.Text = "Entries to keep"
+        Me.Label5.Text = "Log entries"
         '
         'txtGridPrune
         '
-        Me.txtGridPrune.Location = New System.Drawing.Point(89, 48)
+        Me.txtGridPrune.Location = New System.Drawing.Point(104, 47)
         Me.txtGridPrune.Name = "txtGridPrune"
         Me.txtGridPrune.Size = New System.Drawing.Size(43, 20)
         Me.txtGridPrune.TabIndex = 18
-        Me.txtGridPrune.Text = "20000"
+        Me.txtGridPrune.Text = "60000"
         '
         'lblChkCounter
         '
         Me.lblChkCounter.AutoSize = True
-        Me.lblChkCounter.Location = New System.Drawing.Point(278, 31)
+        Me.lblChkCounter.Location = New System.Drawing.Point(275, 32)
         Me.lblChkCounter.Name = "lblChkCounter"
         Me.lblChkCounter.Size = New System.Drawing.Size(13, 13)
         Me.lblChkCounter.TabIndex = 17
@@ -270,7 +270,7 @@ Partial Class frmMain
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(238, 32)
+        Me.Label4.Location = New System.Drawing.Point(232, 32)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(43, 13)
         Me.Label4.TabIndex = 16
@@ -298,7 +298,7 @@ Partial Class frmMain
         'lblErrorCnt
         '
         Me.lblErrorCnt.AutoSize = True
-        Me.lblErrorCnt.Location = New System.Drawing.Point(278, 14)
+        Me.lblErrorCnt.Location = New System.Drawing.Point(275, 14)
         Me.lblErrorCnt.Name = "lblErrorCnt"
         Me.lblErrorCnt.Size = New System.Drawing.Size(13, 13)
         Me.lblErrorCnt.TabIndex = 13
@@ -308,7 +308,7 @@ Partial Class frmMain
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(238, 14)
+        Me.Label7.Location = New System.Drawing.Point(232, 14)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(34, 13)
         Me.Label7.TabIndex = 12
@@ -319,7 +319,7 @@ Partial Class frmMain
         Me.GroupBox2.Controls.Add(Me.txtLastError)
         Me.GroupBox2.Location = New System.Drawing.Point(13, 477)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(537, 82)
+        Me.GroupBox2.Size = New System.Drawing.Size(537, 64)
         Me.GroupBox2.TabIndex = 13
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Last Error"
@@ -331,7 +331,7 @@ Partial Class frmMain
         Me.txtLastError.Name = "txtLastError"
         Me.txtLastError.ReadOnly = True
         Me.txtLastError.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtLastError.Size = New System.Drawing.Size(523, 63)
+        Me.txtLastError.Size = New System.Drawing.Size(523, 45)
         Me.txtLastError.TabIndex = 0
         Me.txtLastError.TabStop = False
         Me.txtLastError.Text = "no errors yet ...."
@@ -340,7 +340,7 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(560, 571)
+        Me.ClientSize = New System.Drawing.Size(560, 553)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.grpInput)
