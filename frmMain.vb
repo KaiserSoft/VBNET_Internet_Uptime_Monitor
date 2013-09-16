@@ -114,12 +114,18 @@ Public Class frmMain
 
     Private Sub get_website(ByVal sender As Object, ByVal e As DoWorkEventArgs)
 
-        Dim content() As Object = DownloadWebpage(My.Settings.url)
+        Dim content() As Object = Nothing 'holds webcontent
         Dim check() As String
+        Dim sWatch = New System.Diagnostics.Stopwatch
+
+        sWatch.Reset()
+        sWatch.Start()
+        content = DownloadWebpage(My.Settings.url) 'this will fetch the website
+        sWatch.Stop()
 
         'check content for errors
         If content(0) = "!200" Then
-            log_message(False, content(1))
+            log_message(False, content(1), sWatch.ElapsedMilliseconds)
             'log content to last error box
             If Me.txtLastError.InvokeRequired Then
                 ' It's on a different thread, so use Invoke. 
@@ -151,9 +157,9 @@ Public Class frmMain
 
         'compare check with found counter. if they are the same then everything "should" be ok
         If check.Count = found_cnt Then
-            log_message(True, content(1))
+            log_message(True, content(1), sWatch.ElapsedMilliseconds.ToString)
         Else
-            log_message(False, content(1))
+            log_message(False, content(1), sWatch.ElapsedMilliseconds.ToString)
             'log content to last error box
             If Me.txtLastError.InvokeRequired Then
                 ' It's on a different thread, so use Invoke. 
@@ -171,7 +177,7 @@ Public Class frmMain
         Me.txtLastError.Text = [string]
     End Sub
 
-    Public Sub log_message(ByRef success As Boolean, ByRef webreturn As String)
+    Public Sub log_message(ByRef success As Boolean, ByRef webreturn As String, ByVal took As String)
         Dim row As String
         Dim cur_index As Integer = Me.gridLog.Rows.Count
 
@@ -188,10 +194,10 @@ Public Class frmMain
 
         If success = True And My.Settings.report_ok = True Then
             ' log positive message
-            row = "OK," & Now.ToString("u") & "," & webreturn & "," & My.Settings.url
+            row = "OK," & Now.ToString("u") & "," & took & "," & webreturn & "," & My.Settings.url
         ElseIf success = False And My.Settings.report_error = True Then
             ' log negative message
-            row = "ERROR," & Now.ToString("u") & "," & webreturn & "," & My.Settings.url
+            row = "ERROR," & Now.ToString("u") & "," & took & "," & webreturn & "," & My.Settings.url
             increment_error_counter()
         Else
             Exit Sub
@@ -375,11 +381,12 @@ Public Class frmMain
     Private Sub setup_new_grid()
         'setup data grid
         gridLog.Rows.Clear()
-        gridLog.ColumnCount = 4
+        gridLog.ColumnCount = 5
         gridLog.Columns(0).Name = "Status"
         gridLog.Columns(1).Name = "Date"
-        gridLog.Columns(2).Name = "Returned"
-        gridLog.Columns(3).Name = "URL"
+        gridLog.Columns(2).Name = "Took (ms)"
+        gridLog.Columns(3).Name = "Returned"
+        gridLog.Columns(4).Name = "URL"
     End Sub
 
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs)
