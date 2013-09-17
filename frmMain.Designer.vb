@@ -51,6 +51,7 @@ Partial Class frmMain
         Me.Label7 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.txtLastError = New System.Windows.Forms.TextBox()
+        Me.chk_AutoExport = New System.Windows.Forms.CheckBox()
         CType(Me.gridLog, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpInput.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -120,7 +121,7 @@ Partial Class frmMain
         'chkReportError
         '
         Me.chkReportError.AutoSize = True
-        Me.chkReportError.Location = New System.Drawing.Point(104, 12)
+        Me.chkReportError.Location = New System.Drawing.Point(104, 32)
         Me.chkReportError.Name = "chkReportError"
         Me.chkReportError.Size = New System.Drawing.Size(88, 17)
         Me.chkReportError.TabIndex = 5
@@ -204,7 +205,7 @@ Partial Class frmMain
         'chkReportOK
         '
         Me.chkReportOK.AutoSize = True
-        Me.chkReportOK.Location = New System.Drawing.Point(104, 30)
+        Me.chkReportOK.Location = New System.Drawing.Point(104, 50)
         Me.chkReportOK.Name = "chkReportOK"
         Me.chkReportOK.Size = New System.Drawing.Size(76, 17)
         Me.chkReportOK.TabIndex = 6
@@ -213,6 +214,7 @@ Partial Class frmMain
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.chk_AutoExport)
         Me.GroupBox1.Controls.Add(Me.btnExportLog)
         Me.GroupBox1.Controls.Add(Me.Label5)
         Me.GroupBox1.Controls.Add(Me.txtGridPrune)
@@ -244,7 +246,7 @@ Partial Class frmMain
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(153, 51)
+        Me.Label5.Location = New System.Drawing.Point(284, 52)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(59, 13)
         Me.Label5.TabIndex = 19
@@ -252,7 +254,7 @@ Partial Class frmMain
         '
         'txtGridPrune
         '
-        Me.txtGridPrune.Location = New System.Drawing.Point(104, 47)
+        Me.txtGridPrune.Location = New System.Drawing.Point(235, 48)
         Me.txtGridPrune.Name = "txtGridPrune"
         Me.txtGridPrune.Size = New System.Drawing.Size(43, 20)
         Me.txtGridPrune.TabIndex = 18
@@ -336,6 +338,17 @@ Partial Class frmMain
         Me.txtLastError.TabStop = False
         Me.txtLastError.Text = "no errors yet ...."
         '
+        'chk_AutoExport
+        '
+        Me.chk_AutoExport.AutoSize = True
+        Me.chk_AutoExport.Enabled = False
+        Me.chk_AutoExport.Location = New System.Drawing.Point(104, 14)
+        Me.chk_AutoExport.Name = "chk_AutoExport"
+        Me.chk_AutoExport.Size = New System.Drawing.Size(81, 17)
+        Me.chk_AutoExport.TabIndex = 21
+        Me.chk_AutoExport.Text = "Auto Export"
+        Me.chk_AutoExport.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -387,5 +400,6 @@ Partial Class frmMain
     Friend WithEvents btnExportLog As System.Windows.Forms.Button
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents txtGridPrune As System.Windows.Forms.TextBox
+    Friend WithEvents chk_AutoExport As System.Windows.Forms.CheckBox
 
 End Class

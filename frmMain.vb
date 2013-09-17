@@ -7,6 +7,7 @@ Public Class frmMain
     Public Shared OverrideSTRG As Boolean = False 'allows user to skip minimum time and timeout checks
     Public Shared OverrideSHIFT As Boolean = False 'allows user to skip minimum time and timeout checks
     Public Shared OverrideActive As Boolean = False ' true when current run is not using checks - needed for "stop" operation
+    Public Shared LogFileName As String = "" 'will contain the filename to flush new log lines to
 
     ' This delegate enables asynchronous calls for setting 
     ' the text property on a TextBox control. 
@@ -264,6 +265,47 @@ Public Class frmMain
 
         Me.gridLog.Rows.Insert(0, row)
         'Me.gridLog.Rows.Add(row)
+
+        'flush row to logfile if enabled
+        If chk_AutoExport.Checked = True Then
+            write_log_line([text])
+        End If
+    End Sub
+
+    Public Sub write_log_line(ByRef line2write As String)
+        'this is just a quick hack to get it working
+        'should be better to use a background worker to keep the file locked 
+        'but this is quicker to write
+
+        Dim file As System.IO.StreamWriter
+        Dim separtor As String = ","
+        file = My.Computer.FileSystem.OpenTextFileWriter(LogFileName, True)
+
+        'Europe uses ; as csv separator in Excel
+        If My.Settings.default_export = 2 Then
+            separtor = ";"
+        End If
+
+
+        'attempt to write the line
+        If File IsNot Nothing Then
+            Try
+                Dim foo As String = line2write
+                foo = foo.Replace(vbCrLf, "")
+                foo = foo.Replace(vbLf, "")
+                foo = foo.Replace(vbCr, "")
+                file.WriteLine(foo)
+
+            Catch ex As Exception
+                txtLastError.Text = "Error during auto export: " & ex.Message
+
+            Finally
+                file.Close()
+            End Try
+        End If
+
+
+
     End Sub
 
     Public Function DownloadWebpage(ByVal URL As String) As Object
@@ -445,7 +487,7 @@ Public Class frmMain
 
     Private Sub btnExportLog_Click(sender As System.Object, e As System.EventArgs) Handles btnExportLog.Click
         Dim output As String = ""
-        Dim line As String
+        Dim line As String = ""
         Dim file As System.IO.StreamWriter
         Dim sF As New SaveFileDialog
         Dim separtor As String = ","
@@ -468,6 +510,9 @@ Public Class frmMain
 
 
             If file IsNot Nothing Then
+                'store the file name for any "auto flush" operations
+                LogFileName = sF.FileName
+
                 'loop over every row then cell
                 For Each row As DataGridViewRow In gridLog.Rows()
                     line = "" 'start a fresh line
@@ -479,7 +524,16 @@ Public Class frmMain
             End If
 
             file.Close()
-            MsgBox("Export complete")
+
+            'program may use the file to add new log entries when the buffer overflows
+            chk_AutoExport.Enabled = True
+
+            If line = "" Then
+                MsgBox("File name stored for auto export. The option has been enabled.")
+            Else
+                MsgBox("Export complete and stored file name for auto export")
+            End If
+
         End If
     End Sub
 End Class
