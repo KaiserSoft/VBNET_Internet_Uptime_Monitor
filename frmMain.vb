@@ -292,7 +292,7 @@ Public Class frmMain
         If File IsNot Nothing Then
             Try
 
-                file.WriteLine(line2write)
+                file.WriteLine(line2write.Replace(",", separtor))
 
             Catch ex As Exception
                 txtLastError.Text = "Error during auto export: " & ex.Message
