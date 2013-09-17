@@ -8,6 +8,7 @@ Public Class frmMain
     Public Shared OverrideSHIFT As Boolean = False 'allows user to skip minimum time and timeout checks
     Public Shared OverrideActive As Boolean = False ' true when current run is not using checks - needed for "stop" operation
     Public Shared LogFileName As String = "" 'will contain the filename to flush new log lines to
+    Private Const WebContentMaxChars As Integer = 300 'sets the maximum number of chars to be checked and loged
 
     ' This delegate enables asynchronous calls for setting 
     ' the text property on a TextBox control. 
@@ -290,11 +291,8 @@ Public Class frmMain
         'attempt to write the line
         If File IsNot Nothing Then
             Try
-                Dim foo As String = line2write
-                foo = foo.Replace(vbCrLf, "")
-                foo = foo.Replace(vbLf, "")
-                foo = foo.Replace(vbCr, "")
-                file.WriteLine(foo)
+
+                file.WriteLine(line2write)
 
             Catch ex As Exception
                 txtLastError.Text = "Error during auto export: " & ex.Message
@@ -314,8 +312,9 @@ Public Class frmMain
         ' und liefert ihn als String zurück. Bei Auftreten eines 
         ' beliebigen Fehlers wird ein leerer String returniert. 
         ' MOD Kaiser: returns an object (0) status code=200|!200, (1) content/error message
-        Dim IoStream As System.IO.Stream
-        Dim StrRead As System.IO.StreamReader
+        ' MOD2 Kaiser: will only return content upto WebContentMaxChars long and trim a few chars
+        Dim IoStream As System.IO.Stream = Nothing
+        Dim StrRead As System.IO.StreamReader = Nothing
         Dim ret(1) As Object
         Try
             ' Einen WebRequest für den URL erzeugen 
@@ -329,7 +328,20 @@ Public Class frmMain
             ' Den Quellcode des URLs zurückgeben 
             ret(0) = "200"
             ret(1) = StrRead.ReadToEnd
+
+            ' remove a few chars to make csv export simpler :)
+            ret(1) = ret(1).ToString.Replace(",", "")
+            ret(1) = ret(1).Replace(vbCrLf, "")
+            ret(1) = ret(1).Replace(vbLf, "")
+            ret(1) = ret(1).Replace(vbCr, "")
+            ret(1) = ret(1).Replace(vbTab, "")
+
+            'set max ret length
+            If ret(1).ToString.Length > WebContentMaxChars Then
+                ret(1) = ret(1).Substring(0, WebContentMaxChars)
+            End If
             Return ret
+
         Catch ex As System.Net.WebException
             ret(0) = "!200"
             ret(1) = ex.Message
@@ -406,7 +418,7 @@ Public Class frmMain
         txtGridPrune.Text = My.Settings.grid_prune
 
         Dim tooltip_words As ToolTip = New ToolTip()
-        tooltip_words.SetToolTip(txtWordUp, "comma separated list of words to look for on the website specified above")
+        tooltip_words.SetToolTip(txtWordUp, "comma separated list of words to look for. Words must be within the first " & WebContentMaxChars & " chars of the page specified above")
 
         'define default grid view
         setup_new_grid()
@@ -529,7 +541,7 @@ Public Class frmMain
             chk_AutoExport.Enabled = True
 
             If line = "" Then
-                MsgBox("File name stored for auto export. The option has been enabled.")
+                txtLastError.Text = Now.ToString("u") & vbCrLf & "File name stored for auto export. The option has been enabled."
             Else
                 MsgBox("Export complete and stored file name for auto export")
             End If
