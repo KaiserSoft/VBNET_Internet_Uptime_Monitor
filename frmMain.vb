@@ -330,7 +330,8 @@ Public Class frmMain
             ret(1) = StrRead.ReadToEnd
 
             ' remove a few chars to make csv export simpler :)
-            ret(1) = ret(1).ToString.Replace(",", "")
+            ret(1) = ret(1).ToString.Replace(",", "") 'remove comma for US csv file
+            ret(1) = ret(1).Replace(";", "") 'remove semicolon for European csv file
             ret(1) = ret(1).Replace(vbCrLf, "")
             ret(1) = ret(1).Replace(vbLf, "")
             ret(1) = ret(1).Replace(vbCr, "")
