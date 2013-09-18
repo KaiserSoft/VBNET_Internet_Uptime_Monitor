@@ -467,6 +467,7 @@ Public Class frmMain
     End Sub
 
     Private Sub btnToggle_Click(sender As System.Object, e As System.EventArgs) Handles btnToggle.Click
+        btnAbout.Focus() 'force focus to another button to prevent someone from disableing the monitor by pressing enter
         toggle_monitor()
     End Sub
 

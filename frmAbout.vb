@@ -1,8 +1,12 @@
 ﻿Public Class frmAbout
 
     Private Sub frmabout_KeyUp(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyUp
-        If e.KeyCode = 27 Or e.KeyCode = 13 Then
+        If e.KeyCode = 27 Then
             Me.Close()
+        End If
+
+        If e.KeyCode = 13 Then
+            Button1_Click(sender, e)
         End If
     End Sub
 

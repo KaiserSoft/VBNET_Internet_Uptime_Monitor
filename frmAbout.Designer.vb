@@ -102,6 +102,7 @@ Partial Class frmAbout
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox1.Size = New System.Drawing.Size(419, 160)
         Me.TextBox1.TabIndex = 6
+        Me.TextBox1.TabStop = False
         Me.TextBox1.Text = resources.GetString("TextBox1.Text")
         '
         'Label6
@@ -139,6 +140,7 @@ Partial Class frmAbout
         Me.txtBTC.ReadOnly = True
         Me.txtBTC.Size = New System.Drawing.Size(226, 20)
         Me.txtBTC.TabIndex = 10
+        Me.txtBTC.TabStop = False
         Me.txtBTC.Text = "1FBvjM5qHy7mCBsJtjF23SPv8xBK4WYWyn"
         '
         'Button1
@@ -146,7 +148,7 @@ Partial Class frmAbout
         Me.Button1.Location = New System.Drawing.Point(330, 22)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(45, 25)
-        Me.Button1.TabIndex = 11
+        Me.Button1.TabIndex = 0
         Me.Button1.Text = "Copy"
         Me.Button1.UseVisualStyleBackColor = True
         '
