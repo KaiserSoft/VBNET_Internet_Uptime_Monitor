@@ -40,6 +40,7 @@ Partial Class frmMain
         Me.Label6 = New System.Windows.Forms.Label()
         Me.chkReportOK = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.chk_AutoExport = New System.Windows.Forms.CheckBox()
         Me.btnExportLog = New System.Windows.Forms.Button()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.txtGridPrune = New System.Windows.Forms.TextBox()
@@ -51,7 +52,6 @@ Partial Class frmMain
         Me.Label7 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.txtLastError = New System.Windows.Forms.TextBox()
-        Me.chk_AutoExport = New System.Windows.Forms.CheckBox()
         CType(Me.gridLog, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpInput.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -125,6 +125,7 @@ Partial Class frmMain
         Me.chkReportError.Name = "chkReportError"
         Me.chkReportError.Size = New System.Drawing.Size(88, 17)
         Me.chkReportError.TabIndex = 5
+        Me.chkReportError.TabStop = False
         Me.chkReportError.Text = "Report Errors"
         Me.chkReportError.UseVisualStyleBackColor = True
         '
@@ -161,7 +162,7 @@ Partial Class frmMain
         Me.btnAbout.Location = New System.Drawing.Point(465, 62)
         Me.btnAbout.Name = "btnAbout"
         Me.btnAbout.Size = New System.Drawing.Size(66, 23)
-        Me.btnAbout.TabIndex = 13
+        Me.btnAbout.TabIndex = 6
         Me.btnAbout.TabStop = False
         Me.btnAbout.Text = "About"
         Me.btnAbout.UseVisualStyleBackColor = True
@@ -171,7 +172,7 @@ Partial Class frmMain
         Me.btnExit.Location = New System.Drawing.Point(382, 63)
         Me.btnExit.Name = "btnExit"
         Me.btnExit.Size = New System.Drawing.Size(66, 23)
-        Me.btnExit.TabIndex = 12
+        Me.btnExit.TabIndex = 5
         Me.btnExit.TabStop = False
         Me.btnExit.Text = "Exit"
         Me.btnExit.UseVisualStyleBackColor = True
@@ -209,6 +210,7 @@ Partial Class frmMain
         Me.chkReportOK.Name = "chkReportOK"
         Me.chkReportOK.Size = New System.Drawing.Size(76, 17)
         Me.chkReportOK.TabIndex = 6
+        Me.chkReportOK.TabStop = False
         Me.chkReportOK.Text = "Report OK"
         Me.chkReportOK.UseVisualStyleBackColor = True
         '
@@ -234,12 +236,25 @@ Partial Class frmMain
         Me.GroupBox1.TabIndex = 12
         Me.GroupBox1.TabStop = False
         '
+        'chk_AutoExport
+        '
+        Me.chk_AutoExport.AutoSize = True
+        Me.chk_AutoExport.Enabled = False
+        Me.chk_AutoExport.Location = New System.Drawing.Point(104, 14)
+        Me.chk_AutoExport.Name = "chk_AutoExport"
+        Me.chk_AutoExport.Size = New System.Drawing.Size(81, 17)
+        Me.chk_AutoExport.TabIndex = 21
+        Me.chk_AutoExport.TabStop = False
+        Me.chk_AutoExport.Text = "Auto Export"
+        Me.chk_AutoExport.UseVisualStyleBackColor = True
+        '
         'btnExportLog
         '
-        Me.btnExportLog.Location = New System.Drawing.Point(6, 12)
+        Me.btnExportLog.Location = New System.Drawing.Point(8, 14)
         Me.btnExportLog.Name = "btnExportLog"
         Me.btnExportLog.Size = New System.Drawing.Size(75, 23)
         Me.btnExportLog.TabIndex = 20
+        Me.btnExportLog.TabStop = False
         Me.btnExportLog.Text = "export log"
         Me.btnExportLog.UseVisualStyleBackColor = True
         '
@@ -258,6 +273,7 @@ Partial Class frmMain
         Me.txtGridPrune.Name = "txtGridPrune"
         Me.txtGridPrune.Size = New System.Drawing.Size(43, 20)
         Me.txtGridPrune.TabIndex = 18
+        Me.txtGridPrune.TabStop = False
         Me.txtGridPrune.Text = "60000"
         '
         'lblChkCounter
@@ -280,7 +296,7 @@ Partial Class frmMain
         '
         'btnClear
         '
-        Me.btnClear.Location = New System.Drawing.Point(6, 45)
+        Me.btnClear.Location = New System.Drawing.Point(9, 46)
         Me.btnClear.Name = "btnClear"
         Me.btnClear.Size = New System.Drawing.Size(75, 23)
         Me.btnClear.TabIndex = 15
@@ -337,17 +353,6 @@ Partial Class frmMain
         Me.txtLastError.TabIndex = 0
         Me.txtLastError.TabStop = False
         Me.txtLastError.Text = "no errors yet ...."
-        '
-        'chk_AutoExport
-        '
-        Me.chk_AutoExport.AutoSize = True
-        Me.chk_AutoExport.Enabled = False
-        Me.chk_AutoExport.Location = New System.Drawing.Point(104, 14)
-        Me.chk_AutoExport.Name = "chk_AutoExport"
-        Me.chk_AutoExport.Size = New System.Drawing.Size(81, 17)
-        Me.chk_AutoExport.TabIndex = 21
-        Me.chk_AutoExport.Text = "Auto Export"
-        Me.chk_AutoExport.UseVisualStyleBackColor = True
         '
         'frmMain
         '

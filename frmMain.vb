@@ -374,21 +374,6 @@ Public Class frmMain
     End Sub
 
     Private Sub frmMain_KeyUp(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyUp
-        'start / when pressing enter and terminate on ESC
-        If e.KeyCode = 27 Or e.KeyCode = 13 Then
-            'enusre that btnToggle has no focus or monitoring is started and stopped right away
-            If e.KeyCode = 13 And btnToggle.Focused() = True Then
-                Exit Sub
-            End If
-
-            ' exit if monitoring is currently stopped - exit on second ESC
-            If e.KeyCode = 27 And btnToggle.Text = "Start" Then
-                Application.Exit()
-            End If
-
-            toggle_monitor()
-        End If
-
         'undo override buttons
         If e.KeyCode = 16 Then
             OverrideSHIFT = False
@@ -420,6 +405,7 @@ Public Class frmMain
 
         Dim tooltip_words As ToolTip = New ToolTip()
         tooltip_words.SetToolTip(txtWordUp, "comma separated list of words to look for. Words must be within the first " & WebContentMaxChars & " chars of the page specified above")
+        tooltip_words.SetToolTip(chk_AutoExport, "append new results to the log file as they come in")
 
         'define default grid view
         setup_new_grid()
